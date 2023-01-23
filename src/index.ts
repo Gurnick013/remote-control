@@ -15,7 +15,10 @@ wss.on('connection', (ws) => {
   const stream = createWebSocketStream(ws, {encoding: 'utf8', decodeStrings: false })
   stream.on('data', async (chunk) => {
     await events(chunk);
-    if (chunk.toString() === 'prnt_scrn') {
+    if (chunk.toString() === 'mouse_position') {
+      const pos = await mouse.getPosition()
+      stream.write(`mouse_position ${pos.x},${pos.y}`)
+    } else if (chunk.toString() === 'prnt_scrn') {
       await printScreen(stream);
     } else {
       stream.write(chunk.toString().replace(/ /g,"_"))
