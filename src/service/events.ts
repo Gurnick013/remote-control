@@ -3,6 +3,7 @@ import { mouse, left, right, up, down, Point, Button, straightTo } from '@nut-tr
 export const events = async (chunk: string) => {
   try {
     const [command, width, height] = chunk.toString().split(' ');
+    mouse.config.mouseSpeed = 200
     if (command === 'mouse_left') {
       return  await mouse.move(left(+width))
     }
@@ -30,17 +31,25 @@ export const events = async (chunk: string) => {
       }
 
       await mouse.releaseButton(Button.LEFT)
-      return
+      return;
     }
     if (command === 'draw_square') {
-      mouse.config.mouseSpeed = 200
       await mouse.pressButton(Button.LEFT)
       await mouse.move(right(+width))
       await mouse.move(down(+width))
       await mouse.move(left(+width))
       await mouse.move(up(+width))
       await mouse.releaseButton(Button.LEFT)
-      return
+      return;
+    }
+    if (command === 'draw_rectangle') {
+      await mouse.pressButton(Button.LEFT);
+      await mouse.move(down(+height));
+      await mouse.move(right(+width));
+      await mouse.move(up(+height));
+      await mouse.move(left(+width));
+      await mouse.releaseButton(Button.LEFT);
+      return;
     }
   } catch (e) {
     console.log(`Error: ${(e as Error).message}`)
