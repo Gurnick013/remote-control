@@ -1,6 +1,8 @@
 import { httpServer } from "./http_server";
 import { createWebSocketStream, WebSocketServer } from "ws";
 import { events } from "./service/events";
+import { mouse } from "@nut-tree/nut-js";
+import { printScreen } from "./service/printScreen";
 
 const HTTP_PORT = 8181;
 const WSS_PORT = 8080;
@@ -13,6 +15,11 @@ wss.on('connection', (ws) => {
   const stream = createWebSocketStream(ws, {encoding: 'utf8', decodeStrings: false })
   stream.on('data', async (chunk) => {
     await events(chunk);
+    if (chunk.toString() === 'prnt_scrn') {
+      await printScreen(stream);
+    } else {
+      stream.write(chunk.toString().replace(/ /g,"_"))
+    }
     console.log(`Last Command: ${chunk}`)
   })
 })

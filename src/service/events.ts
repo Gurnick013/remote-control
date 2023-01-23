@@ -1,18 +1,20 @@
-import { mouse, left, right, up, down, Point, Button, straightTo } from '@nut-tree/nut-js'
+import { mouse, left, right, up, down, Point, Button, straightTo, Region } from '@nut-tree/nut-js';
 
 export const events = async (chunk: string) => {
   try {
     const [command, width, height] = chunk.toString().split(' ');
     mouse.config.mouseSpeed = 200
     if (command === 'mouse_left') {
-      return  await mouse.move(left(+width))
+      await mouse.move(left(+width));
+      return;
     }
     if (command === 'mouse_right') {
-      return await mouse.move(right(+width))
+      await mouse.move(right(+width));
+      return;
     }
     if (command === 'mouse_up') {
       await mouse.move(up(+width));
-      return
+      return;
     }
     if (command === 'mouse_down') {
       await mouse.move(down(+width));
